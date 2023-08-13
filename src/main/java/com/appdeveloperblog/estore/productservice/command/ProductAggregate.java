@@ -15,7 +15,9 @@ import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 
-@Aggregate
+import static com.appdeveloperblog.estore.productservice.ProductServiceApplication.PRODUCT_SNAPSHOT_TRIGGER_DEFINITION;
+
+@Aggregate(snapshotTriggerDefinition = PRODUCT_SNAPSHOT_TRIGGER_DEFINITION)
 public class ProductAggregate {
     @AggregateIdentifier
     private String productId;
@@ -25,7 +27,6 @@ public class ProductAggregate {
 
     public ProductAggregate() {
     }
-
 
 
     /**

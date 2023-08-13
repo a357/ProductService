@@ -6,6 +6,9 @@ import com.appdeveloperblog.estore.productservice.core.errorhandling.ProductServ
 import com.thoughtworks.xstream.XStream;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.config.EventProcessingConfigurer;
+import org.axonframework.eventsourcing.EventCountSnapshotTriggerDefinition;
+import org.axonframework.eventsourcing.SnapshotTriggerDefinition;
+import org.axonframework.eventsourcing.Snapshotter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,13 +16,16 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import reactor.core.scheduler.Schedulers;
 
 import static com.appdeveloperblog.estore.productservice.core.procgroups.Groups.PRODUCT_GROUP;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-@Import({ AxonConfig.class })
+@Import({AxonConfig.class})
 public class ProductServiceApplication {
+
+	public static final String PRODUCT_SNAPSHOT_TRIGGER_DEFINITION = "productSnapshotTriggerDefinition";
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProductServiceApplication.class, args);
@@ -41,4 +47,11 @@ public class ProductServiceApplication {
 		// 		conf -> PropagatingErrorHandler.instance());
 	}
 
+	/*
+	* to check proper working snapshot i can do via log in properties file or via Axon Server Dashboard
+	* */
+	@Bean(name = PRODUCT_SNAPSHOT_TRIGGER_DEFINITION)
+	public SnapshotTriggerDefinition productTriggerSnapshotDefinition(Snapshotter snapshotter) {
+		return new EventCountSnapshotTriggerDefinition(snapshotter, 3);
+	}
 }

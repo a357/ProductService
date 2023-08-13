@@ -36,4 +36,5 @@ axon:
       product-group.mode: subscribing # event handler @ProcessingGroup("product-group") Groups.PRODUCT_GROUP
 
 
-
+logging.level:
+  org.axonframework.axonserver.connector.event.axon.AxonServerEventStore: DEBUG
